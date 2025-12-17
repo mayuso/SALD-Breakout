@@ -46,6 +46,7 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . --config Release --parallel
+cmake --install . --config Release
 ```
 
 This will generate a `release/` directory in the project root. You can then run the game directly from there:
