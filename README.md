@@ -13,19 +13,11 @@ Ensure you have **CMake** and a **C++ compiler** installed.
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/mayuso/SALD-breakout.git
+git clone https://github.com/mayuso/SALD-breakout.git --recusrive
 cd SALD-breakout
 ```
 
-**2. Update submodules**
-
-This project depends on the **SALD** engine, which is included as a submodule.
-
-```bash
-git submodule update --init --recursive
-```
-
-**3. Build and Run (Debug)**
+**2. Build and Run (Debug)**
 
 For quick testing or development:
 
@@ -54,6 +46,13 @@ This will generate a `release/` directory in the project root. You can then run 
 ```bash
 cd ../release
 ./sald-breakout
+```
+
+### Other useful commands (mainly for me)
+
+```bash
+# Update submodules
+git submodule update --remote --recursive
 ```
 
 ## About
