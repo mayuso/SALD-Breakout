@@ -117,7 +117,7 @@ void GameLayer::OnEvent(Sald::Event &event)
                     m_Ball->Position.x += velocity;
             }
         }
-        if (this->Keys[GLFW_KEY_SPACE])
+        if (Sald::Input::IsKeyPressed(Sald::Key::Space))
             m_Ball->Stuck = false;
     }
 }

@@ -31,7 +31,6 @@ public:
     ~GameLayer();
 
     GameState m_State;
-    bool Keys[1024];
     unsigned int m_Width, m_Height;
     std::vector<GameLevel> m_Levels;
     unsigned int m_CurrentLevel;
