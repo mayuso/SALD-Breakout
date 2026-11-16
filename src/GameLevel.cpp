@@ -16,23 +16,25 @@ void GameLevel::Load(const char *file, unsigned int levelWidth, unsigned int lev
     m_Bricks.clear();
     // load from file
     unsigned int tileCode;
-    GameLevel level;
     std::string line;
     std::ifstream fstream(file);
     std::vector<std::vector<unsigned int>> tileData;
-    if (fstream)
+    if (!fstream)
     {
-        while (std::getline(fstream, line)) // read each line from level file
-        {
-            std::istringstream sstream(line);
-            std::vector<unsigned int> row;
-            while (sstream >> tileCode) // read each word separated by spaces
-                row.push_back(tileCode);
-            tileData.push_back(row);
-        }
-        if (tileData.size() > 0)
-            Initialize(tileData, levelWidth, levelHeight);
+        SALD_ERROR("Failed to load level: {0}", file);
+        return;
     }
+    while (std::getline(fstream, line)) // read each line from level file
+    {
+        std::istringstream sstream(line);
+        std::vector<unsigned int> row;
+        while (sstream >> tileCode) // read each word separated by spaces
+            row.push_back(tileCode);
+        if (!row.empty()) // skip blank lines
+            tileData.push_back(row);
+    }
+    if (tileData.size() > 0)
+        Initialize(tileData, levelWidth, levelHeight);
 }
 
 void GameLevel::Draw(Sald::SpriteRenderer *renderer)
@@ -50,16 +52,22 @@ bool GameLevel::IsCompleted()
     return true;
 }
 
-void GameLevel::Initialize(std::vector<std::vector<unsigned int>> tileData, unsigned int levelWidth, unsigned int levelHeight)
+void GameLevel::Reset()
+{
+    for (GameObject &tile : m_Bricks)
+        tile.Destroyed = false;
+}
+
+void GameLevel::Initialize(const std::vector<std::vector<unsigned int>> &tileData, unsigned int levelWidth, unsigned int levelHeight)
 {
     // calculate dimensions
     unsigned int height = tileData.size();
     unsigned int width = tileData[0].size(); // note we can index vector at [0] since this function is only called if height > 0
-    float unit_width = levelWidth / static_cast<float>(width), unit_height = levelHeight / height;
+    float unit_width = levelWidth / static_cast<float>(width), unit_height = levelHeight / static_cast<float>(height);
     // initialize level tiles based on tileData
     for (unsigned int y = 0; y < height; ++y)
     {
-        for (unsigned int x = 0; x < width; ++x)
+        for (unsigned int x = 0; x < width && x < tileData[y].size(); ++x) // rows may be shorter than the first one
         {
             // check block type from level data (2D level array)
             if (tileData[y][x] == 1) // solid
