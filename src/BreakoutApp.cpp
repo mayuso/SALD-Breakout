@@ -1,9 +1,12 @@
 #include "BreakoutApp.h"
 #include "GameLayer.h"
 
-BreakoutApp::BreakoutApp() : Sald::Application(1280, 720, Sald::Application::Dimensions::Two)
+const unsigned int SCREEN_WIDTH = 1280;
+const unsigned int SCREEN_HEIGHT = 720;
+
+BreakoutApp::BreakoutApp() : Sald::Application(SCREEN_WIDTH, SCREEN_HEIGHT, Sald::Application::Dimensions::Two)
 {
-    PushLayer(new GameLayer());
+    PushLayer(new GameLayer(SCREEN_WIDTH, SCREEN_HEIGHT));
 }
 
 BreakoutApp::~BreakoutApp()

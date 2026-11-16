@@ -1,9 +1,11 @@
 #pragma once
-#include "Sald/Core/Timestep.h"
 #include "sald.h"
 
 #include "GameLevel.h"
 #include "BallObject.h"
+
+#include <tuple>
+#include <vector>
 
 enum GameState
 {
@@ -17,7 +19,7 @@ enum Direction {
 	RIGHT,
 	DOWN,
 	LEFT
-};   
+};
 
 using Collision = std::tuple<bool, enum Direction, glm::vec2>;
 
@@ -27,7 +29,7 @@ const float PLAYER_VELOCITY(1000.0f);
 class GameLayer : public Sald::Layer
 {
 public:
-    GameLayer();
+    GameLayer(unsigned int width, unsigned int height);
     ~GameLayer();
 
     GameState m_State;
@@ -35,13 +37,13 @@ public:
     std::vector<GameLevel> m_Levels;
     unsigned int m_CurrentLevel;
 
-    void Init();
-
-    void ProcessInput(float dt);
     void Render();
 
     void OnUpdate(Sald::Timestep timestep) override;
     void OnEvent(Sald::Event &event) override;
+
+    void ResetLevel();
+    void ResetPlayer();
 
     void DoCollisions();
     bool CheckCollision(GameObject &one, GameObject &two);
