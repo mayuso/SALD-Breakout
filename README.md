@@ -29,13 +29,6 @@ cmake --build . --parallel
 ./sald-breakout
 ```
 
-The assets (Textures, Shaders, Levels) are copied next to the executable and loaded relative to the working directory, so run the game from the folder that contains it. With multi-config generators (Visual Studio) that is `build/Debug`, and the debug executable is named `sald-breakoutd`:
-
-```bash
-cd Debug
-./sald-breakoutd
-```
-
 ### Release Build
 
 To create a standalone `release` folder containing the optimized executable and all necessary assets (Textures, Shaders, Levels):
