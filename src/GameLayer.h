@@ -24,7 +24,7 @@ enum Direction {
 using Collision = std::tuple<bool, enum Direction, glm::vec2>;
 
 const glm::vec2 PLAYER_SIZE(100.0f, 20.0f);
-const float PLAYER_VELOCITY(1000.0f);
+const float PLAYER_VELOCITY(500.0f); // pixels per second
 
 class GameLayer : public Sald::Layer
 {
@@ -37,10 +37,10 @@ public:
     std::vector<GameLevel> m_Levels;
     unsigned int m_CurrentLevel;
 
+    void ProcessInput(float dt);
     void Render();
 
     void OnUpdate(Sald::Timestep timestep) override;
-    void OnEvent(Sald::Event &event) override;
 
     void ResetLevel();
     void ResetPlayer();

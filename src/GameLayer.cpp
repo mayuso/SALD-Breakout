@@ -68,6 +68,8 @@ void GameLayer::OnUpdate(Sald::Timestep timestep)
     Sald::RenderCommand::SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     Sald::RenderCommand::Clear();
 
+    ProcessInput(timestep.GetSeconds());
+
     m_Ball->Move(timestep, m_Width);
 
     this->DoCollisions();
@@ -81,37 +83,28 @@ void GameLayer::OnUpdate(Sald::Timestep timestep)
     Render();
 }
 
-void GameLayer::OnEvent(Sald::Event &event)
+void GameLayer::ProcessInput(float dt)
 {
-    // TODO: PLAYER_VELOCITY * 0.01f should be multiplying deltaTime. Right now OnUpdate receives it, but OnEvent does not.
-    // Think about how to pass it here in a clean way
+    // keys are polled every frame so movement is smooth and independent of OS key repeat
+    float direction = 0.0f;
+    if (Sald::Input::IsKeyPressed(Sald::Key::A))
+        direction -= 1.0f;
+    if (Sald::Input::IsKeyPressed(Sald::Key::D))
+        direction += 1.0f;
 
-    if (event.GetEventType() == Sald::EventType::KeyPressed)
+    if (direction != 0.0f)
     {
-
-        float velocity = PLAYER_VELOCITY * 0.01f;
-        // move playerboard
-        if (Sald::Input::IsKeyPressed(Sald::Key::A))
-        {
-            if (m_Player->Position.x >= 0.0f)
-            {
-                m_Player->Position.x -= velocity;
-                if (m_Ball->Stuck)
-                    m_Ball->Position.x -= velocity;
-            }
-        }
-        if (Sald::Input::IsKeyPressed(Sald::Key::D))
-        {
-            if (m_Player->Position.x <= m_Width - m_Player->Size.x)
-            {
-                m_Player->Position.x += velocity;
-                if (m_Ball->Stuck)
-                    m_Ball->Position.x += velocity;
-            }
-        }
-        if (Sald::Input::IsKeyPressed(Sald::Key::Space))
-            m_Ball->Stuck = false;
+        // move playerboard, keeping it inside the window
+        float newX = glm::clamp(m_Player->Position.x + direction * PLAYER_VELOCITY * dt,
+                                0.0f, m_Width - m_Player->Size.x);
+        float moved = newX - m_Player->Position.x;
+        m_Player->Position.x = newX;
+        if (m_Ball->Stuck)
+            m_Ball->Position.x += moved;
     }
+
+    if (Sald::Input::IsKeyPressed(Sald::Key::Space))
+        m_Ball->Stuck = false;
 }
 
 void GameLayer::Render()
