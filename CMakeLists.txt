@@ -2,13 +2,12 @@
 cmake_minimum_required(VERSION 4.2)
 project(sald-breakout)
 
-if(UNIX)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath='$ORIGIN'")
+# `cmake --install` goes to release/ unless a prefix is given (--prefix <dir>)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}/release" CACHE PATH "Install directory" FORCE)
 endif()
 
 add_executable(${PROJECT_NAME})
-
-set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "d")
 
 target_sources(${PROJECT_NAME}
     PRIVATE
@@ -45,17 +44,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 install(TARGETS ${PROJECT_NAME}
-    DESTINATION ${PROJECT_SOURCE_DIR}/release
+    DESTINATION .
 )
 
-install(DIRECTORY src/Shaders
-    DESTINATION ${PROJECT_SOURCE_DIR}/release
-)
-
-install(DIRECTORY src/Textures
-    DESTINATION ${PROJECT_SOURCE_DIR}/release
-)
-
-install(DIRECTORY src/Levels
-    DESTINATION ${PROJECT_SOURCE_DIR}/release
+install(DIRECTORY src/Shaders src/Textures src/Levels
+    DESTINATION .
 )

@@ -29,6 +29,8 @@ cmake --build . --parallel
 ./sald-breakout
 ```
 
+The build copies `Shaders/`, `Textures/` and `Levels/` next to the executable, which loads them from its working directory. With a multi-config generator (Visual Studio) the executable is in `Debug/` instead, so run it from `build/Debug`.
+
 ### Release Build
 
 To create a standalone `release` folder containing the optimized executable and all necessary assets (Textures, Shaders, Levels):
@@ -41,7 +43,7 @@ cmake --build . --config Release --parallel
 cmake --install . --config Release
 ```
 
-This will generate a `release/` directory in the project root. You can then run the game directly from there:
+This will generate a `release/` directory in the project root (pass `--prefix <dir>` to `cmake --install` to put it elsewhere). You can then run the game directly from there:
 
 ```bash
 cd ../release
